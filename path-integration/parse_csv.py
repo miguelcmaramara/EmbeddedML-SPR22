@@ -1,41 +1,38 @@
 import csv
 
+
 # Reads in the values inbetween the Begin and exit statements and returns a tuple of values
-def read_event_BEGIN_TO_EXIT(x_list,y_list,z_list,time_list, get_from_csv):
+def read_event_BEGIN_TO_EXIT(x_list,y_list,z_list,time_list, get_from_csv, start):
     send_event = []
-    xout = []
-    yout = []
-    zout = []
-    tout = []
-    for i in range(0, len(get_from_csv)-1):
+    for i in range(start, len(get_from_csv)):
         if "BEGIN" in str(time_list[i]):
             # send_event = []
             j = i + 1
             while "EXIT" not in str(time_list[j]):
                 send_event.append([x_list[j], y_list[j], z_list[j], time_list[j]])
-                xout.append(x_list[j])
-                yout.append(y_list[j])
-                zout.append(z_list[j])
-                tout.append(time_list[j])
-
                 j += 1
                 # print(time_list[j])
-            return (xout, yout, zout, tout)
+            return tuple(send_event)
 
-def csv_to_list(filePath):
+def csv_to_list():
 
     # Step 1: Reads the CSV file and inputs values into get_from_csv list
-    file = open(filePath, "r")
+    file = open("o.csv", "r")
     csv_reader = csv.reader(file)
 
     get_from_csv = []
+    index_of_start_statements = []
     count = 0
+    index = 0
     for row in csv_reader:
         if("BEGIN" in row[0]):
+            index_of_start_statements.append(index)
             count += 1
+        index += 1
         get_from_csv.append(row)
 
     print(count)
+    print(index_of_start_statements)
 
     # Step 2: Creates lists to record time, x, y, z values in lists individually
     time_list = []
@@ -59,6 +56,7 @@ def csv_to_list(filePath):
             y_list.append(float(row[2]))
             z_list.append(float(row[3]))
 
+
     # Step 4: Creates master_list, a tuple of all lists recorded
     addList = []
     for i in range(0, len(get_from_csv)):
@@ -70,9 +68,13 @@ def csv_to_list(filePath):
 
     print(master_list)
 
-    print(read_event_BEGIN_TO_EXIT(x_list, y_list, z_list, time_list, get_from_csv))
-    return(read_event_BEGIN_TO_EXIT(x_list, y_list, z_list, time_list, get_from_csv))
+    final_list = []
+    for i in range(0, len(index_of_start_statements)):
+        value = read_event_BEGIN_TO_EXIT(x_list, y_list, z_list, time_list, get_from_csv, index_of_start_statements[i])
+        #print(value)
+        final_list.append(value)
 
+    print(final_list)
 
 
 if __name__ == '__main__':
