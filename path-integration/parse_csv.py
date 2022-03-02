@@ -4,20 +4,29 @@ import csv
 # Reads in the values inbetween the Begin and exit statements and returns a tuple of values
 def read_event_BEGIN_TO_EXIT(x_list,y_list,z_list,time_list, get_from_csv, start):
     send_event = []
+    x_set_list = []
+    y_set_list = []
+    z_set_list = []
+    time_set_list = []
     for i in range(start, len(get_from_csv)):
         if "BEGIN" in str(time_list[i]):
             # send_event = []
             j = i + 1
             while "EXIT" not in str(time_list[j]):
-                send_event.append([x_list[j], y_list[j], z_list[j], time_list[j]])
+                x_set_list.append(x_list[j])
+                y_set_list.append(y_list[j])
+                z_set_list.append(z_list[j])
+                time_set_list.append(time_list[j])
+                # send_event.append([x_list[j], y_list[j], z_list[j], time_list[j]])
                 j += 1
                 # print(time_list[j])
+            send_event = [x_set_list, y_set_list, z_set_list, time_set_list]
             return tuple(send_event)
 
-def csv_to_list():
+def csv_to_list(path_name):
 
     # Step 1: Reads the CSV file and inputs values into get_from_csv list
-    file = open("o.csv", "r")
+    file = open(path_name, "r")
     csv_reader = csv.reader(file)
 
     get_from_csv = []
@@ -74,7 +83,9 @@ def csv_to_list():
         #print(value)
         final_list.append(value)
 
+
     print(final_list)
+    return final_list
 
 
 if __name__ == '__main__':
