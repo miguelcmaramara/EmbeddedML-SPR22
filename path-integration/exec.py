@@ -10,5 +10,5 @@ if __name__ == '__main__':
     # tlsts = integrate_xyzt(integrate_xyzt(tlsts))
 
     # display_xyzt(tlsts)
-    mult_xyzt_plt([tlsts, integrate_xyzt(integrate_xyzt(tlsts))])
+    mult_xyzt_plt([tlsts, integrate_xyzt(integrate_xyzt(tlsts, mode="trap"), mode="trap")])
     # mult_xyzt_plt([integrate_xyzt(integrate_xyzt(tlsts))])

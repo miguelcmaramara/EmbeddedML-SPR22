@@ -1,14 +1,21 @@
 
 
-def integrate(x, t):
+def integrate(x, t, mode="rect"):
    
     sum=0;
     lst=[0]
 
-    for i in range(len(x) - 2): # HACK: check this
-        sum+=(x[i]*.001*(t[i+1]-t[i]));
-        lst.append(sum)
-        print(sum);
+    if(mode=="rect"):
+        for i in range(len(x) - 2): # HACK: check this
+            sum+=(x[i]*.001*(t[i+1]-t[i]));
+            lst.append(sum)
+            # print(sum);
+
+    elif(mode=="trap"):
+        for i in range(len(x) - 2): # HACK: check this
+            sum+=((x[i] + x[i+1]) *.001*(t[i+1]-t[i])/2);
+            lst.append(sum)
+            # print(sum);
         
 
     return lst
@@ -16,14 +23,14 @@ def integrate(x, t):
   
     
 
-def integrate_xyzt(xyzt_tuple):
+def integrate_xyzt(xyzt_tuple, mode="rect"):
     """
     Integrates an entire xyzt tuple and returns it
     """
     (x, y, z, t) = xyzt_tuple
-    x = integrate(x, t)
-    y = integrate(y, t)
-    z = integrate(z, t)
+    x = integrate(x, t, mode=mode)
+    y = integrate(y, t, mode=mode)
+    z = integrate(z, t, mode=mode)
     t.pop()
     res = (x, y, z, t)
 
