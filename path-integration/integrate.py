@@ -1,19 +1,19 @@
 
 
-def integrate(x, t, mode="rect"):
+def integrate(x, t,c, mode="rect"):
    
     sum=0;
     lst=[0]
 
     if(mode=="rect"):
         for i in range(len(x) - 2): # HACK: check this
-            sum+=(x[i]*.001*(t[i+1]-t[i]));
+            sum+=((x[i]+c)*(t[i+1]-t[i]));
             lst.append(sum)
             # print(sum);
 
     elif(mode=="trap"):
         for i in range(len(x) - 2): # HACK: check this
-            sum+=((x[i] + x[i+1]) *.001*(t[i+1]-t[i])/2);
+            sum+=(((x[i] + x[i+1])/2+c) *.001*(t[i+1]-t[i]));
             lst.append(sum)
             # print(sum);
         
@@ -23,14 +23,15 @@ def integrate(x, t, mode="rect"):
   
     
 
-def integrate_xyzt(xyzt_tuple, mode="rect"):
+def integrate_xyzt(xyzt_tuple,c_tuple, mode="rect"):
     """
     Integrates an entire xyzt tuple and returns it
     """
     (x, y, z, t) = xyzt_tuple
-    x = integrate(x, t, mode=mode)
-    y = integrate(y, t, mode=mode)
-    z = integrate(z, t, mode=mode)
+    (cx, cy, cz ) = c_tuple
+    x = integrate(x, t,cx, mode=mode)
+    y = integrate(y, t,cy, mode=mode)
+    z = integrate(z, t,cz, mode=mode)
     t.pop()
     res = (x, y, z, t)
 
@@ -60,5 +61,5 @@ if __name__ == "__main__":
     tup = (xAccel, yAccel, zAccel, t)
 
     # print(integrate(xAccel,t)) # should be equal to
-    print(integrate_xyzt(tup))
-    print(integrate_xyzt(integrate_xyzt(tup)))
+    print(integrate_xyzt(tup,(0,0,0)) )
+    print(integrate_xyzt(integrate_xyzt(tup, (0,0,0)),(0,0,0)))
