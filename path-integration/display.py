@@ -1,5 +1,4 @@
 # display.py
-from audioop import mul
 import matplotlib.pyplot as plt
 # from mpl_toolkits  import mplot3d
 
@@ -35,8 +34,9 @@ def display_xyzt(xyzt_tuple, color="Greens", label='Plot label'):
     ax = fig.add_subplot(projection='3d')
 
     # Plotting the points
-    for x, y, z, t in zip(x_lst, y_lst, z_lst, t_lst):
-        ax.scatter(x, y, z, marker='o', c=t)
+    ax.scatter(x,y,z,cmap="jet")
+    # for x, y, z, t in zip(x_lst, y_lst, z_lst, t_lst):
+    #     ax.scatter(x, y, z, marker='o', c=t)
 
     # Setting Axes
     ax.set_xlabel('X Axis')
@@ -64,6 +64,10 @@ def add_xyzt_plt(fig, xyzt_tuple, pos):
     ax.set_ylabel('Y Axis')
     ax.set_zlabel('Z Axis')
 
+    ax.set_xlim3d(-10,10)
+    ax.set_ylim3d(-10,10)
+    ax.set_zlim3d(-10,10)
+
 
 def mult_xyzt_plt(lst_of_tups):
     fig = plt.figure(figsize=plt.figaspect(1/len(lst_of_tups)))
@@ -71,6 +75,46 @@ def mult_xyzt_plt(lst_of_tups):
     for pos, xyzt_tuple in enumerate(lst_of_tups):
         add_xyzt_plt(fig, xyzt_tuple, pos)
 
+    plt.show()
+
+def plot_2d(xlst, ylst, zlst, tlst, color="blue"):
+    at = plt.figure()
+    tnew = []
+    zeros=[]
+    for t in tlst:
+        tnew.append(t - tlst[0])
+        zeros.append(0)
+
+    xnew = []
+    ynew = []
+    znew = []
+    for x, y, z in zip(xlst, ylst, zlst):
+        xnew.append(x - xlst[0])
+        ynew.append(y - ylst[0])
+        znew.append(z - zlst[0])
+
+    plt.plot(tnew, zeros, c="black")
+    # plt.scatter(tnew, xnew, c=color, s=2)
+    # plt.scatter(tnew, ynew, c="red", s=2)
+    # plt.scatter(tnew, znew, c="green", s=2)
+    # plt.plot(tnew, xnew, c=color)
+    # plt.plot(tnew, ynew, c="red")
+    # plt.plot(tnew, znew, c="green")
+
+    plt.scatter(tnew, xlst, c=color, s=2)
+    plt.scatter(tnew, ylst, c="red", s=2)
+    plt.scatter(tnew, zlst, c="green", s=2)
+    ln1 = plt.plot(tnew, xlst, c=color)
+    ln2 = plt.plot(tnew, ylst, c="red")
+    ln3 = plt.plot(tnew, zlst, c="green")
+
+
+    # ax.set_xlim([-1,1])
+    plt.ylim(-.5,.5)
+    # plt.ylim(-1,1)
+    # for x, y in zip(xlst,ylst):
+    #     ax.scatter(x - xref, y)
+    plt.legend(["zero", "x", "y", "z"])
     plt.show()
 
 

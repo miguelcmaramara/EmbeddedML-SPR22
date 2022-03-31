@@ -9,10 +9,13 @@ def read_event_BEGIN_TO_EXIT(x_list,y_list,z_list,time_list, get_from_csv, start
     z_set_list = []
     time_set_list = []
     for i in range(start, len(get_from_csv)):
-        if "BEGIN" in str(time_list[i]):
+        if "BEGIN" in str(time_list[i]) or "loop" in str(time_list[i]):
             # send_event = []
             j = i + 1
-            while "EXIT" not in str(time_list[j]):
+            while j < len(time_list) and \
+                "EXIT" not in str(time_list[j]) and \
+                "loop" not in str(time_list[j]):
+                
                 x_set_list.append(x_list[j])
                 y_set_list.append(y_list[j])
                 z_set_list.append(z_list[j])
@@ -34,14 +37,18 @@ def csv_to_list(path_name):
     count = 0
     index = 0
     for row in csv_reader:
-        if("BEGIN" in row[0]):
+        # print(row)
+        if("BEGIN" in row[0] or "switch" in row[0]):
             index_of_start_statements.append(index)
             count += 1
+        if len(row) <= 1 and "switch" not in row[0]:
+            continue
         index += 1
         get_from_csv.append(row)
 
-    print(count)
-    print(index_of_start_statements)
+    # print(count)
+    # print(get_from_csv)
+    # print(index_of_start_statements)
 
     # Step 2: Creates lists to record time, x, y, z values in lists individually
     time_list = []
@@ -51,7 +58,16 @@ def csv_to_list(path_name):
 
     # Step 3: Input values for each list from each column
     for row in get_from_csv:
-        if len(row) <= 3:
+        # print(row)
+        if len(row) <= 1:
+            correct_time = row[0].split()
+            time_list.append(correct_time[len(correct_time)-1])
+            x_list.append(row[0])
+            y_list.append(float(0))
+            z_list.append(float(0))
+            
+
+        if len(row) <= 3 and len(row) > 1:
             correct_time = row[0].split()
             time_list.append(correct_time[len(correct_time)-1])
             x_list.append(float(row[1]))
@@ -65,17 +81,18 @@ def csv_to_list(path_name):
             y_list.append(float(row[2]))
             z_list.append(float(row[3]))
 
+    print(time_list)
 
     # Step 4: Creates master_list, a tuple of all lists recorded
     addList = []
     for i in range(0, len(get_from_csv)):
-        if "BEGIN" not in str(time_list[i]) and "EXIT" not in str(time_list[i]):
+        if "BEGIN" not in str(time_list[i]) and "EXIT" not in str(time_list[i]) and "loop" not in str(time_list[i]):
             addList.append([time_list[i], x_list[i], y_list[i], z_list[i]])
 
         # print(str(time_list[i]) + ", " + str(x_list[i]) + ", " + str(y_list[i]) + ", " + str(z_list[i]))
     master_list = (x_list, y_list, z_list, time_list)
 
-    print(master_list)
+    # print(master_list)
 
     final_list = []
     for i in range(0, len(index_of_start_statements)):
@@ -84,7 +101,7 @@ def csv_to_list(path_name):
         final_list.append(value)
 
 
-    print(final_list)
+    # print(final_list)
     return final_list
 
 
