@@ -64,9 +64,10 @@ def add_xyzt_plt(fig, xyzt_tuple, pos):
     ax.set_ylabel('Y Axis')
     ax.set_zlabel('Z Axis')
 
-    ax.set_xlim3d(-10,10)
-    ax.set_ylim3d(-10,10)
-    ax.set_zlim3d(-10,10)
+    ax.set_box_aspect([1, 1, 1])
+    # ax.set_xlim3d(-.5,.5)
+    # ax.set_ylim3d(-.5,.5)
+    # ax.set_zlim3d(-.5,.5)
 
 
 def mult_xyzt_plt(lst_of_tups):
@@ -109,9 +110,9 @@ def plot_2d(xlst, ylst, zlst, tlst, color="blue"):
     ln3 = plt.plot(tnew, zlst, c="green")
 
 
-    # ax.set_xlim([-1,1])
-    plt.ylim(-.5,.5)
     # plt.ylim(-1,1)
+    # plt.ylim(-1,1)
+
     # for x, y in zip(xlst,ylst):
     #     ax.scatter(x - xref, y)
     plt.legend(["zero", "x", "y", "z"])

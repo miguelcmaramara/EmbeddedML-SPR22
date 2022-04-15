@@ -5,7 +5,7 @@ def integrate(x, t, c=(0, 0, 0), mode="rect", even_spacing=-1):
         t = range(0, len(x)*even_spacing, even_spacing)
    
     # print(t[20])
-    mult = .02; # tunable size changer
+    mult = 1; # tunable size changer
     sum=0;
     lst=[0]
 
