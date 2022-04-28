@@ -1,7 +1,7 @@
 from display import mult_xyzt_plt, display_xyzt, plot_2d
 from integrate import integrate_xyzt
 from parse_csv import csv_to_list
-from pre_precess import sub_avg_all, sub_avg, apply_to_all, correct_units
+from pre_precess import sub_avg_all, sub_avg, all_to_all, apply_to_all, correct_units, low_pass_filter, averaging_filter
 from kalman import apply_kalman
 
 if __name__ == '__main__':
@@ -31,13 +31,23 @@ if __name__ == '__main__':
     # -----
 
     # Correcting force units
-    tlsts_modded = apply_to_all(
-        lambda lst: correct_units(lst, 10),
+    tlsts_modded = sub_avg_all([x, y, z], 8)
+    (x, y, z) = tlsts_modded
+    tlsts_modded = all_to_all(
+        [
+            lambda lst: correct_units(lst, 10),
+            lambda lst: averaging_filter(lst, 30, trailing=True),
+            lambda lst: low_pass_filter(lst, .1, center_only=True),
+            lambda lst: low_pass_filter(lst, .05, center_only=False)
+        ],
         [x,y,z]
     )
+    # tlsts_modded = apply_to_all(
+    #     lambda lst: correct_units(lst, 10),
+    #     [x,y,z]
+    # )
     # Correcting time units
     t = correct_units(t, .001)
-    tlsts_modded = sub_avg_all([x, y, z], 8)
     # tlsts_modded = apply_to_all(lambda a:sub_avg(a, 8), [x,y,z])
     tlsts_modded.append(t)
     tlsts = tuple(tlsts_modded)
