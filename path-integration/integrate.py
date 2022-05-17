@@ -1,6 +1,6 @@
 
 
-def integrate(x, t, c=(0, 0, 0), mode="rect", even_spacing=-1):
+def integrate(x, t, c=(0, 0, 0), mode="rect", even_spacing=-1, vel_fact=False):
     if even_spacing > 0:
         t = range(0, len(x)*even_spacing, even_spacing)
    
@@ -8,6 +8,7 @@ def integrate(x, t, c=(0, 0, 0), mode="rect", even_spacing=-1):
     mult = 1; # tunable size changer
     sum=0;
     lst=[0]
+    ctr = 0
 
     if(mode=="rect"):
         for i in range(len(x) - 2): # HACK: check this
@@ -17,8 +18,15 @@ def integrate(x, t, c=(0, 0, 0), mode="rect", even_spacing=-1):
 
     elif(mode=="trap"):
         for i in range(len(x) - 2): # HACK: check this
-            sum+=mult*(((x[i] + x[i+1])/2+c)*(t[i+1]-t[i]));
-            lst.append(sum)
+            if(x[i] >  -.05 and x[i] < .05):
+                ctr+= 1
+            if(vel_fact and ctr > 20):
+                ctr = 0
+                lst.append(0)
+                sum = 0
+            else:
+                sum+=mult*(((x[i] + x[i+1])/2+c)*(t[i+1]-t[i]));
+                lst.append(sum)
             # print(sum);
         
 
@@ -27,15 +35,15 @@ def integrate(x, t, c=(0, 0, 0), mode="rect", even_spacing=-1):
   
     
 
-def integrate_xyzt(xyzt_tuple, c_tuple=(0,0,0), mode="rect", even_spacing=-1):
+def integrate_xyzt(xyzt_tuple, c_tuple=(0,0,0), mode="rect", even_spacing=-1, vel_fact=False):
     """
     Integrates an entire xyzt tuple and returns it
     """
     (x, y, z, t) = xyzt_tuple
     (cx, cy, cz ) = c_tuple
-    x = integrate(x, t,cx, mode=mode, even_spacing=even_spacing)
-    y = integrate(y, t,cy, mode=mode, even_spacing=even_spacing)
-    z = integrate(z, t,cz, mode=mode, even_spacing=even_spacing)
+    x = integrate(x, t,cx, mode=mode, even_spacing=even_spacing, vel_fact=vel_fact)
+    y = integrate(y, t,cy, mode=mode, even_spacing=even_spacing, vel_fact=vel_fact)
+    z = integrate(z, t,cz, mode=mode, even_spacing=even_spacing, vel_fact=vel_fact)
     t.pop()
     res = (x, y, z, t)
 

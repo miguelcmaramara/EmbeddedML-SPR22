@@ -64,10 +64,10 @@ def add_xyzt_plt(fig, xyzt_tuple, pos):
     ax.set_ylabel('Y Axis')
     ax.set_zlabel('Z Axis')
 
-    ax.set_box_aspect([1, 1, 1])
-    # ax.set_xlim3d(-.5,.5)
-    # ax.set_ylim3d(-.5,.5)
-    # ax.set_zlim3d(-.5,.5)
+    # ax.set_box_aspect([1, 1, 1])
+    ax.set_xlim3d(-.5,.5)
+    ax.set_ylim3d(-.5,.5)
+    ax.set_zlim3d(-.5,.5)
 
 
 def mult_xyzt_plt(lst_of_tups):

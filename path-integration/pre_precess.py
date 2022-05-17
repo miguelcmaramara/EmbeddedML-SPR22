@@ -1,4 +1,5 @@
 
+
 def sub_avg(lst, num_data):
     if num_data == 0:
         return lst
@@ -96,10 +97,33 @@ def low_pass_filter(lst, threshold, center_only=False):
         return res
 
 
+def append_numbers(lst, num_of_nums, num_to_append=0,  stretch=False):
+    # appends a bunch of numbers to a list
+    # for example, given lst x = [0,1,2,4,6],  num_of_nums = 4, num_to_append = 5,
+    # the following is returned:[0,1,2,4,6, 5, 5, 5, 5]
+    
+    # Stretch means that the array would take the average difference in units and append that difference
+    # rendering num_to_append meaningless
+
+    if(stretch):
+        cumm_diff = 0
+        for i in range(len(lst ) - 1):
+            cumm_diff = cumm_diff + (lst[i + 1] - lst[i])
+        
+        avg_diff = cumm_diff / (len(lst) - 1)
+
+        for i in range(num_of_nums):
+            lst.append(lst[len(lst) - 1] + avg_diff)
+
+        return lst
+
+    return lst + ([num_to_append] * num_of_nums)
     
 
 
 if __name__ == "__main__":
     # Testing code
     # print(averaging_filter([0,2,4,8,16],2))
-    print(low_pass_filter([0,2,4,8,16], 5, False))
+    # print(low_pass_filter([0,2,4,8,16], 5, False))
+    # print(append_numbers([0,2,4,8,16], 5, 4))
+    print(append_numbers([0,2,4,6,8], 4, stretch=True))
